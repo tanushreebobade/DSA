@@ -5,8 +5,8 @@ public:
         int maxProfit = 0;
         for (int i = 0; i < prices.size(); i++) {
             mini = min(mini, prices[i]);
-            int profit = prices[i] - mini;
-            maxProfit = max(maxProfit, profit);
+          
+            maxProfit = max(maxProfit, prices[i] - mini);
         }
 
         return maxProfit;
