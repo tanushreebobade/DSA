@@ -1,49 +1,36 @@
 class Solution {
-private:
-    void bfs(int row, int col, vector<vector<char>>& grid,
-             vector<vector<int>>& vis) {
+public:
+    void dfs(int r, int c, vector<vector<char>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-        queue<pair<int, int>> q;
+        grid[r][c] = '0';
+        int delrow[] = {0, -1, 0, 1};
+        int delcol[] = {-1, 0, 1, 0};
+        for (int i = 0; i < 4; i++) {
+            int nr = r + delrow[i];
+            int nc = c + delcol[i];
+            if (nr >= 0 && nr < n && nc >= 0 && nc < m && grid[nr][nc] == '1') {
 
-        q.push({row, col});
-        vis[row][col] = 1;
-
-        while (!q.empty()) {
-            int row = q.front().first;
-            int col = q.front().second;
-            q.pop();
-            int delrow[] = {-1, 0, 1, 0};
-            int delcol[] = {0, 1, 0, -1};
-
-            for (int i = 0; i < 4; i++) {
-                int nrow = delrow[i] + row;
-                int ncol = delcol[i] + col;
-                if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                    !vis[nrow][ncol] && grid[nrow][ncol] == '1') {
-                    vis[nrow][ncol] = 1;
-                    q.push({nrow, ncol});
-                }
+                dfs(nr, nc, grid);
             }
         }
     }
 
-public:
     int numIslands(vector<vector<char>>& grid) {
         int n = grid.size();
         int m = grid[0].size();
-        vector<vector<int>> vis(n, vector<int>(m, 0));
+        vector<vector<char>> ans = grid;
+        int total = 0;
 
-        int cnt = 0;
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < m; col++) {
-
-                if (!vis[row][col] && grid[row][col] == '1') {
-                    cnt++;
-                    bfs(row, col, grid, vis);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(i, j, grid);
+                    total++;
                 }
             }
         }
-        return cnt;
+
+        return total;
     }
 };
