@@ -1,55 +1,46 @@
 class Solution {
-private:
-    void dfs(int row, int col, vector<vector<int>>& vis,
-             vector<vector<char>>& board,
-             int delrow[], int delcol[]) {
-        vis[row][col] = 1;
-        int n = board.size();
-        int m = board[0].size();
-        for (int k = 0; k < 4; k++) {
-            int nrow = row + delrow[k];
-            int ncol = col + delcol[k];
-            if (nrow >= 0 && nrow < n &&
-                ncol >= 0 && ncol < m &&
-                !vis[nrow][ncol] &&
-                board[nrow][ncol] == 'O') {
+public:
+    int n, m;
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
-                dfs(nrow, ncol, vis, board, delrow, delcol);
-            }
+    void dfs(int r, int c, vector<vector<int>>& grid, vector<vector<char>>& board) {
+        grid[r][c] = 1;
+
+        for(auto &d: dirs) {
+            int nr = r + d[0];
+            int nc = c + d[1];
+
+            if(nr < 0 || nr >= n || nc < 0 || nc >= m) continue;
+            if(board[nr][nc] == 'O' && grid[nr][nc] == 0) dfs(nr, nc, grid, board);
         }
     }
 
-public:
     void solve(vector<vector<char>>& board) {
-        int n = board.size();
-        int m = board[0].size();
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-        int delrow[] = {-1, 0, 1, 0};
-        int delcol[] = {0, 1, 0, -1};
+        n = board.size();
+        m = board[0].size();
 
-        // Traverse first  last row
-        for (int i = 0; i < m; i++) {
-            if (!vis[0][i] && board[0][i] == 'O')
-              dfs(0, i, vis, board, delrow, delcol);
-            if (!vis[n - 1][i] && board[n - 1][i] == 'O')
-                dfs(n - 1, i, vis, board, delrow, delcol);
-        }
-        // Traverse first last column
-        for (int i = 0; i < n; i++) {
-            if (!vis[i][0] && board[i][0] == 'O')
-                dfs(i, 0, vis, board, delrow, delcol);
+        vector<vector<int>> grid(n, vector<int>(m, 0));
 
-            if (!vis[i][m - 1] && board[i][m - 1] == 'O')
-                dfs(i, m - 1, vis, board, delrow, delcol);
+        for(int j = 0; j < m; j++) {
+            if(board[0][j] == 'O') dfs(0, j, grid, board);
+            if(board[n - 1][j] == 'O') dfs(n - 1, j, grid, board);
         }
 
-        // Convert all unvisited 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
+        for(int i = 0; i < n; i++) {
+            if(board[i][0] == 'O') dfs(i, 0, grid, board);
+            if(board[i][m - 1] == 'O') dfs(i, m - 1, grid, board);
+        }
 
-                if (board[i][j] == 'O' && !vis[i][j]) {
-                    board[i][j] = 'X';
-                }
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                cout << grid[i][j] << " ";
+            }
+            cout << endl;
+        }
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(grid[i][j] != 1 && board[i][j] == 'O') board[i][j] = 'X';
             }
         }
     }
