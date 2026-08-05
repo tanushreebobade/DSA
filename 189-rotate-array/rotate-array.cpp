@@ -1,16 +1,12 @@
 class Solution {
 public:
-    void reversearr(vector<int>& nums, int start, int end) {
-        while (start < end) {
-              swap(nums[start++], nums[end--]);
-        }
-    }
     void rotate(vector<int>& nums, int k) {
         int n = nums.size();
+        if (n == 0)
+            return;
         k = k % n;
-
-        reversearr(nums, 0, n - k - 1);
-        reversearr(nums, n - k, n - 1);
-        reversearr(nums, 0, n - 1);
+        reverse(nums.begin(), nums.end());
+        reverse(nums.begin() + k, nums.end());
+        reverse(nums.begin(), nums.begin() + k);
     }
 };
