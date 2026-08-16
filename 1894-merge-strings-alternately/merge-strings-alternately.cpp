@@ -21,8 +21,7 @@ public:
             i++;
         }
         while (j < m) {
-            if (j < m)
-                s += word2[j];
+            s += word2[j];
             j++;
         }
 
