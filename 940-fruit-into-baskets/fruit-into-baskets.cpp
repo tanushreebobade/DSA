@@ -5,8 +5,8 @@ public:
 
         int i = 0;
         int ans = 0;
-
-        for (int j = 0; j < fruits.size(); j++) {
+        int j = 0;
+         while(j < fruits.size()){
             mp[fruits[j]]++;
 
             if (mp.size() > 2) {
@@ -18,6 +18,7 @@ public:
                 i++;
             }
             ans = max(ans, j - i + 1);
+            j++;
         }
         return ans;
     }
